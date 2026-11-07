@@ -1,0 +1,18 @@
+[Unit]
+Description=Kota - AI usage limits service (Claude, Codex)
+Documentation=https://github.com/ensignalp/kota
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=dbus
+BusName=io.github.mustazafi.Kota
+ExecStart=@BINDIR@/kota daemon
+Restart=on-failure
+RestartSec=10
+# Not: NoNewPrivileges vb. kullanılmıyor; "Bağlan" ile açılan terminal bu
+# kısıtları devralıp içinde sudo'yu bozabilirdi. Terminal zaten
+# `systemd-run --user` ile ayrı birimde başlatılır.
+
+[Install]
+WantedBy=graphical-session.target

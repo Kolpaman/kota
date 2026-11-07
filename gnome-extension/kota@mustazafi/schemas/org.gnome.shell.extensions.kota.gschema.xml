@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.kota" path="/org/gnome/shell/extensions/kota/">
+    <!-- Yerleşim -->
+    <key name="panel-enabled" type="b">
+      <default>true</default>
+      <summary>Show the indicator in the top bar</summary>
+    </key>
+    <key name="panel-index" type="i">
+      <range min="-1" max="20"/>
+      <default>0</default>
+      <summary>Position of the indicator inside its panel box (-1 = end)</summary>
+    </key>
+    <key name="qs-enabled" type="b">
+      <default>true</default>
+      <summary>Add tiles to Quick Settings</summary>
+    </key>
+    <key name="qs-mode" type="s">
+      <choices><choice value="single"/><choice value="providers"/></choices>
+      <default>'single'</default>
+      <summary>One Kota tile or one tile per provider</summary>
+    </key>
+    <key name="qs-indicator" type="b">
+      <default>false</default>
+      <summary>Show logo and percent among the system status icons</summary>
+    </key>
+    <key name="qs-full" type="b">
+      <default>true</default>
+      <summary>Show every usage window in the Quick Settings menu</summary>
+    </key>
+    <key name="datemenu-enabled" type="b">
+      <default>true</default>
+      <summary>Add a usage section to the date/notification menu</summary>
+    </key>
+    <key name="datemenu-position" type="s">
+      <choices><choice value="right-top"/><choice value="right-bottom"/><choice value="left-top"/><choice value="left-bottom"/></choices>
+      <default>'right-bottom'</default>
+      <summary>Where the section sits in the date menu</summary>
+    </key>
+    <key name="datemenu-detail" type="s">
+      <choices><choice value="compact"/><choice value="full"/></choices>
+      <default>'compact'</default>
+      <summary>Date menu detail: panel value only or every window</summary>
+    </key>
+    <key name="datemenu-selected-only" type="b">
+      <default>false</default>
+      <summary>Date menu shows only providers selected for the panel</summary>
+    </key>
+    <!-- Arka plan ve çizgiler -->
+    <key name="popup-background" type="s">
+      <choices><choice value="auto"/><choice value="translucent"/><choice value="opaque"/></choices>
+      <default>'auto'</default>
+      <summary>Popup background: auto (follows Blur My Shell), translucent, opaque</summary>
+    </key>
+    <key name="popup-opacity" type="i">
+      <range min="0" max="100"/>
+      <default>45</default>
+      <summary>Background opacity when translucent (percent)</summary>
+    </key>
+    <key name="usage-style" type="s">
+      <choices><choice value="rings"/><choice value="bars"/></choices>
+      <default>'rings'</default>
+      <summary>AI usage card layout: rings or progress lines</summary>
+    </key>
+    <key name="show-pace" type="b">
+      <default>true</default>
+      <summary>Show the pace marker on progress lines</summary>
+    </key>
+    <!-- Panel -->
+    <key name="panel-position" type="s">
+      <choices><choice value="left"/><choice value="center"/><choice value="right"/></choices>
+      <default>'right'</default>
+      <summary>Panel position</summary>
+    </key>
+    <key name="panel-style" type="s">
+      <choices><choice value="icon"/><choice value="ring"/><choice value="text"/></choices>
+      <default>'icon'</default>
+      <summary>Panel item style: logo + percent, ring + percent, percent only</summary>
+    </key>
+    <key name="panel-mode" type="s">
+      <choices><choice value="each"/><choice value="max"/></choices>
+      <default>'each'</default>
+      <summary>Show each selected provider or only the highest value</summary>
+    </key>
+    <key name="panel-providers" type="as">
+      <default>[]</default>
+      <summary>Providers shown in the panel, in order (empty: all with data)</summary>
+    </key>
+    <key name="panel-windows" type="a{ss}">
+      <default>{}</default>
+      <summary>Which usage window to show per provider ('auto' = highest)</summary>
+    </key>
+    <key name="panel-window-mode" type="s">
+      <choices><choice value="all"/><choice value="auto"/></choices>
+      <default>'all'</default>
+      <summary>Panel windows: all (with day/week letters) or only the highest</summary>
+    </key>
+    <key name="panel-letters" type="b">
+      <default>false</default>
+      <summary>Show the window letter even when a single value is shown</summary>
+    </key>
+    <key name="panel-icon" type="s">
+      <choices><choice value="provider"/><choice value="kota"/><choice value="both"/></choices>
+      <default>'provider'</default>
+      <summary>Panel icon: AI platform logo, Kota logo, or Kota + AI logos</summary>
+    </key>
+    <key name="bar-colors" type="s">
+      <choices><choice value="usage"/><choice value="brand"/></choices>
+      <default>'usage'</default>
+      <summary>Progress colors: limit-aware (green to red) or brand color</summary>
+    </key>
+    <key name="popup-theme" type="s">
+      <choices><choice value="auto"/><choice value="dark"/><choice value="light"/></choices>
+      <default>'auto'</default>
+      <summary>Popup theme</summary>
+    </key>
+    <key name="activity-range" type="s">
+      <choices><choice value="24h"/><choice value="7d"/><choice value="30d"/></choices>
+      <default>'24h'</default>
+      <summary>Activity chart range</summary>
+    </key>
+    <key name="notify-forecast" type="b">
+      <default>true</default>
+      <summary>Warn when a limit will run out before it resets</summary>
+    </key>
+    <key name="notify-forecast-minutes" type="i">
+      <range min="10" max="300"/>
+      <default>60</default>
+      <summary>How many minutes ahead to warn</summary>
+    </key>
+    <key name="panel-colored-icons" type="b">
+      <default>false</default>
+      <summary>Brand-colored logos in the panel</summary>
+    </key>
+    <key name="show-remaining" type="b">
+      <default>false</default>
+      <summary>Show remaining instead of used percentage</summary>
+    </key>
+    <!-- Açılır pencere -->
+    <key name="popup-width" type="i">
+      <range min="340" max="640"/>
+      <default>460</default>
+      <summary>Popup width in pixels</summary>
+    </key>
+    <key name="usage-columns" type="i">
+      <range min="1" max="3"/>
+      <default>2</default>
+      <summary>Columns in the AI usage card</summary>
+    </key>
+    <key name="accent-color" type="s">
+      <default>'#f5a623'</default>
+      <summary>Accent color for charts</summary>
+    </key>
+    <key name="show-tiles" type="b"><default>true</default><summary>Show summary tiles</summary></key>
+    <key name="show-usage" type="b"><default>true</default><summary>Show AI usage rings</summary></key>
+    <key name="show-activity" type="b"><default>true</default><summary>Show the last 24 hours chart</summary></key>
+    <key name="show-agents" type="b"><default>true</default><summary>Show running agents</summary></key>
+    <key name="show-filter" type="b"><default>true</default><summary>Show the filter box</summary></key>
+    <!-- Bildirimler -->
+    <key name="notifications" type="b">
+      <default>true</default>
+      <summary>Notify when a window crosses the warning/critical thresholds</summary>
+    </key>
+    <key name="notify-reset" type="b">
+      <default>true</default>
+      <summary>Notify when a limit that crossed a threshold resets</summary>
+    </key>
+    <key name="notify-expired" type="b">
+      <default>true</default>
+      <summary>Notify when a provider session drops</summary>
+    </key>
+    <key name="notify-state" type="s">
+      <default>'{}'</default>
+      <summary>Internal: thresholds already notified per window period</summary>
+    </key>
+    <!-- Genel -->
+    <key name="language" type="s">
+      <choices><choice value="auto"/><choice value="tr"/><choice value="en"/></choices>
+      <default>'tr'</default>
+      <summary>Interface language</summary>
+    </key>
+    <key name="toggle-shortcut" type="as">
+      <default><![CDATA[['<Super><Alt>k']]]></default>
+      <summary>Keyboard shortcut to toggle the popup</summary>
+    </key>
+  </schema>
+</schemalist>

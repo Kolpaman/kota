@@ -1,0 +1,38 @@
+# Kota yapılandırması: ~/.config/kota/config.toml
+# Her alan isteğe bağlıdır; burada yazanlar varsayılan değerlerdir.
+
+# Sağlayıcıların sorgulanma aralığı (saniye, en az 30).
+interval_seconds = 120
+
+# Düzenli sorguyu duraklat (menüdeki ⏸ düğmesi bunu değiştirir).
+paused = false
+
+[thresholds]
+# Bu yüzdelerde renk değişir ve (açıksa) bildirim gönderilir.
+warning = 80.0
+critical = 90.0
+
+[claude]
+enabled = true
+# Erişim token'ının süresi dolunca (yaklaşık 8 saatte bir) Claude Code ile aynı
+# kilit protokolüyle (~/.claude/.oauth_refresh.lock) yenile ve dosyaya geri yaz.
+# false: süre dolunca "Yeniden bağlan" gösterilir; Claude Code'u açmak yeter.
+refresh_tokens = true
+# ~/.claude/projects/**/*.jsonl loglarından bugünkü token kullanımını say (ağ gerekmez).
+local_logs = true
+# config_dir = "/home/kullanici/.claude"
+
+[codex]
+enabled = true
+# ~/.codex/sessions loglarından token say; API'ye ulaşılamazsa son bilinen limitleri göster.
+local_logs = true
+# home = "/home/kullanici/.codex"
+
+# Diğer sağlayıcılar (Kota ayarları → Sağlayıcılar'dan da açılır).
+# API anahtarları bu dosyada DEĞİL, GNOME Anahtarlığı'nda (libsecret) saklanır:
+#   kota key set deepseek
+# [providers.gemini]
+# enabled = true
+# [providers.openai]       # yönetici (admin) anahtarı; bu ayki harcama
+# enabled = true
+# budget = 50.0            # aylık bütçe → yüzde olarak gösterilir

@@ -1,0 +1,316 @@
+/* Kota — kendi koyu teması (GNOME menü görünümünden bağımsız). */
+
+/* ---------- Üst panel ---------- */
+.kota-panel { spacing: 0; }
+.kota-panel-item { spacing: 4px; }
+.kota-panel-item-gap { margin-left: 9px; }
+.kota-panel-icon { padding: 0; }
+.kota-panel-pct { font-weight: bold; font-feature-settings: "tnum"; }
+.kota-panel-pct.kota-sev-warning { color: #ffc95c; }
+.kota-panel-pct.kota-sev-critical { color: #ff7b6e; }
+.kota-panel-pct.kota-sev-stale { color: rgba(255, 255, 255, 0.5); }
+.kota-panel-letter {
+  font-size: 10.5px; font-weight: 800; text-align: center;
+  min-width: 15px; min-height: 15px; border-radius: 5px; padding: 0 1px;
+  background-color: rgba(255, 255, 255, 0.16);
+}
+.kota-panel-letter-gap { margin-left: 6px; }
+.kota-panel-item-near { margin-left: 6px; }
+.kota-panel-paused { margin-left: 6px; font-size: 0.8em; color: rgba(255, 255, 255, 0.6); }
+
+/* ---------- Açılır pencere kabı ----------
+ * Arka plan yalnızca `popup-menu-content` üzerindedir: Blur My Shell de tam
+ * olarak bu öğenin arkasını bulanıklaştırır. Kutu işaretçisi (boxpointer)
+ * kendi zeminini çizmez; yoksa bulanıklığın önüne opak bir katman girer.
+ * Yarı saydam kipte zemin rengi ve köşe yarıçapı eklentide satır içi verilir. */
+.kota-menu .popup-menu-content {
+  /* Köşe yarıçapı GNOME temasından gelir (açılır menülerle aynı); iç
+   * öğelerin yarıçapları dış kenara eş merkezli seçildi. */
+  background-color: #1a1e26;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
+}
+.kota-menu.kota-glass .popup-menu-content {
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+.kota-menu.kota-glass .kota-card,
+.kota-menu.kota-glass .kota-tile {
+  background-color: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.07);
+}
+.kota-menu .popup-menu-box { padding: 0; spacing: 0; }
+
+.kota-root {
+  spacing: 10px;
+  color: #e6edf3;
+}
+
+/* ---------- Başlık ---------- */
+.kota-header { spacing: 6px; padding: 2px 6px 4px 8px; }
+.kota-title { font-size: 1.18em; font-weight: 800; color: #ffffff; }
+.kota-subtitle { font-size: 0.85em; font-weight: 700; padding: 1px 8px; border-radius: 99px; }
+.kota-subtitle.kota-paused { color: #f5a623; background-color: rgba(245, 166, 35, 0.14); }
+.kota-icon-btn {
+  border-radius: 99px;
+  padding: 8px;
+  min-width: 14px;
+  min-height: 14px;
+  color: rgba(230, 237, 243, 0.75);
+  background-color: transparent;
+}
+.kota-icon-btn:hover { background-color: rgba(255, 255, 255, 0.09); color: #ffffff; }
+.kota-icon-btn:active { background-color: rgba(255, 255, 255, 0.15); }
+
+/* ---------- Kutucuklar ---------- */
+.kota-tiles { spacing: 8px; }
+.kota-tile {
+  background-color: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 10px 12px;
+  spacing: 4px;
+}
+.kota-tile-top { spacing: 6px; }
+.kota-tile-title { font-size: 0.92em; font-weight: 600; color: rgba(230, 237, 243, 0.78); }
+.kota-tile-badge { font-size: 0.85em; color: rgba(230, 237, 243, 0.55); }
+.kota-tile-badge.kota-live { color: #3fb950; }
+.kota-tile-bottom { spacing: 4px; }
+.kota-tile-value { font-size: 1.7em; font-weight: 700; color: #ffffff; font-feature-settings: "tnum"; }
+.kota-tile-unit { font-size: 0.9em; color: rgba(230, 237, 243, 0.6); padding-bottom: 4px; }
+.kota-tile-side { font-size: 0.88em; color: rgba(230, 237, 243, 0.62); padding-bottom: 4px; }
+.kota-tile-foot { font-size: 0.8em; }
+
+/* ---------- Kartlar ---------- */
+.kota-card {
+  background-color: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 12px 14px;
+  spacing: 10px;
+}
+.kota-card-title { font-weight: 700; color: #f0f6fc; }
+.kota-card-right { font-weight: 600; color: rgba(230, 237, 243, 0.75); font-feature-settings: "tnum"; }
+.kota-card-body { spacing: 8px; }
+
+.kota-dim { font-size: 0.86em; color: rgba(230, 237, 243, 0.58); }
+.kota-strong { font-weight: 700; color: #f0f6fc; }
+.kota-strong-small { font-weight: 600; font-size: 0.92em; color: #f0f6fc; }
+.kota-link { color: #58a6ff; font-weight: 600; }
+.kota-warn-text { color: #f5a623; }
+.kota-chip {
+  font-size: 0.78em; font-weight: 700; padding: 1px 8px; border-radius: 99px;
+  background-color: rgba(255, 255, 255, 0.1); color: rgba(240, 246, 252, 0.85);
+}
+.kota-footer { font-size: 0.78em; padding: 0 8px; color: rgba(230, 237, 243, 0.4); }
+
+/* ---------- AI kullanımı ---------- */
+.kota-usage-grid-row { spacing: 6px; }
+.kota-usage-cell {
+  border-radius: 10px;
+  padding: 6px 8px;
+  background-color: transparent;
+}
+.kota-usage-cell:hover { background-color: rgba(255, 255, 255, 0.05); }
+.kota-usage-cell.selected { background-color: rgba(255, 255, 255, 0.08); }
+.kota-usage-row { spacing: 12px; }
+.kota-usage-name { font-size: 0.85em; color: rgba(230, 237, 243, 0.7); }
+.kota-usage-value { font-size: 1.45em; font-weight: 800; color: #ffffff; font-feature-settings: "tnum"; }
+.kota-usage-value.kota-sev-warning { color: #f5a623; }
+.kota-usage-value.kota-sev-critical { color: #ff6b5e; }
+.kota-usage-caption { font-size: 0.92em; font-weight: 600; color: rgba(240, 246, 252, 0.88); }
+.kota-usage-sub { font-size: 0.8em; color: rgba(230, 237, 243, 0.55); }
+.kota-usage-sub.kota-link { color: #58a6ff; }
+
+.kota-detail {
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.22);
+  spacing: 8px;
+}
+.kota-detail-head { spacing: 8px; }
+.kota-status { font-size: 0.85em; }
+.kota-status-ok { color: #3fb950; }
+.kota-status-error { color: #d29922; }
+.kota-status-expired { color: #f78166; }
+.kota-status-not_connected, .kota-status-unsupported { color: #8b949e; }
+.kota-window { spacing: 4px; }
+.kota-window-label { font-size: 0.92em; }
+.kota-window-pct { font-weight: 700; font-feature-settings: "tnum"; }
+.kota-window-pct.kota-sev-warning { color: #f5a623; }
+.kota-window-pct.kota-sev-critical { color: #ff6b5e; }
+.kota-window-pct.kota-sev-stale { color: #8b949e; }
+.kota-bar-track { height: 6px; border-radius: 3px; background-color: rgba(255, 255, 255, 0.1); }
+.kota-bar-fill { border-radius: 3px; }
+.kota-pill-btn {
+  border-radius: 99px; padding: 5px 14px; font-weight: 600;
+  background-color: rgba(88, 166, 255, 0.16); color: #79b8ff;
+}
+.kota-pill-btn:hover { background-color: rgba(88, 166, 255, 0.28); }
+
+/* ---------- 24 saat ---------- */
+.kota-chart { spacing: 4px; }
+.kota-chart-bar { border-radius: 3px; }
+.kota-chart-col:hover .kota-chart-bar { background-color: #ffffff; }
+.kota-axis { padding-top: 2px; }
+.kota-axis-label { font-size: 0.8em; }
+.kota-axis-day { text-align: center; }
+.kota-good-text { color: #3fb950; }
+.kota-card-head { spacing: 8px; }
+.kota-range {
+  background-color: rgba(255, 255, 255, 0.06); border-radius: 99px; padding: 2px; spacing: 2px;
+}
+.kota-range-btn {
+  font-size: 0.78em; font-weight: 700; padding: 2px 9px; border-radius: 99px;
+  color: rgba(230, 237, 243, 0.65);
+}
+.kota-range-btn:hover { color: #ffffff; }
+.kota-range-btn:checked { background-color: rgba(255, 255, 255, 0.14); color: #ffffff; }
+
+/* ---------- Canlı ajanlar (klasör → alt proje → ajan ağacı) ---------- */
+.kota-scroll { max-height: 300px; }
+.kota-live-list { spacing: 14px; }
+.kota-group { spacing: 0; }
+.kota-group-head { spacing: 8px; }
+.kota-group-names { spacing: 8px; padding-top: 2px; }
+.kota-folder {
+  background-color: rgba(88, 166, 255, 0.16); color: #79b8ff;
+  border-radius: 8px; padding: 4px; min-width: 14px; min-height: 14px;
+}
+.kota-path { font-size: 0.8em; }
+.kota-tree-row { spacing: 0; }
+.kota-node { spacing: 8px; padding-top: 4px; }
+.kota-node-text { spacing: 8px; padding-top: 3px; }
+.kota-node-icon {
+  background-color: rgba(245, 166, 35, 0.14); color: #f5b84a;
+  border-radius: 7px; padding: 5px; min-width: 12px; min-height: 12px;
+}
+.kota-node-name { font-weight: 700; color: #f0f6fc; font-size: 0.95em; }
+.kota-node-open { padding: 4px; }
+.kota-agent { spacing: 10px; padding: 4px 0; }
+.kota-agent-icon {
+  background-color: #0d1117; border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px; padding: 8px;
+}
+.kota-agent-name { font-weight: 700; color: #f0f6fc; }
+.kota-working { color: #3fb950; }
+.kota-chips { spacing: 4px; padding-top: 3px; }
+.kota-port {
+  font-size: 0.78em; font-weight: 600; padding: 1px 7px; border-radius: 99px;
+  background-color: rgba(88, 166, 255, 0.14); color: #79b8ff;
+}
+.kota-port:hover { background-color: rgba(88, 166, 255, 0.3); }
+.kota-stop { background-color: rgba(255, 255, 255, 0.08); }
+.kota-stop:hover { background-color: rgba(248, 81, 73, 0.25); color: #ff7b72; }
+.kota-go { background-color: rgba(88, 166, 255, 0.85); color: #ffffff; }
+.kota-go:hover { background-color: #58a6ff; color: #ffffff; }
+
+.kota-letter {
+  font-weight: 800; color: #ffffff; text-align: center;
+  background-color: rgba(255, 255, 255, 0.14); border-radius: 5px;
+}
+
+/* ---------- Filtre ---------- */
+.kota-filter {
+  border-radius: 12px;
+  padding: 9px 12px;
+  background-color: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #e6edf3;
+  caret-color: #58a6ff;
+  selection-background-color: rgba(88, 166, 255, 0.4);
+}
+.kota-filter:focus { border-color: rgba(88, 166, 255, 0.6); }
+.kota-filter StIcon { color: rgba(230, 237, 243, 0.55); padding-right: 6px; }
+
+/* ---------- İlerleme çizgileri ---------- */
+.kota-progress { margin: 1px 0; }
+.kota-usage-bar { padding: 8px 10px; }
+.kota-usage-bar-box { spacing: 6px; }
+.kota-usage-bar-top { spacing: 10px; }
+.kota-usage-bar-name { font-weight: 700; color: #f0f6fc; }
+.kota-usage-bar-value { font-size: 1.25em; font-weight: 800; color: #ffffff; font-feature-settings: "tnum"; }
+.kota-usage-bar-value.kota-sev-warning { color: #f5a623; }
+.kota-usage-bar-value.kota-sev-critical { color: #ff6b5e; }
+.kota-usage-bar-value.kota-sev-stale { color: #8b949e; }
+
+/* ---------- Özet listesi (Hızlı Ayarlar + tarih penceresi; tema renklerini izler) ---------- */
+.kota-sum { spacing: 12px; }
+.kota-sum-row { spacing: 4px; }
+.kota-sum-head { spacing: 8px; }
+.kota-sum-name { font-weight: 700; }
+.kota-sum-value, .kota-sum-pct { font-weight: 800; font-feature-settings: "tnum"; }
+.kota-sum-value { font-size: 1.1em; }
+.kota-sum-small { font-size: 0.85em; opacity: 0.85; }
+.kota-sum-muted { opacity: 0.6; }
+.kota-sum-value.kota-sev-warning, .kota-sum-pct.kota-sev-warning { color: #f5a623; }
+.kota-sum-value.kota-sev-critical, .kota-sum-pct.kota-sev-critical { color: #ff6b5e; }
+.kota-sum-value.kota-sev-stale, .kota-sum-pct.kota-sev-stale { opacity: 0.6; }
+.kota-sum-link { color: #58a6ff; font-weight: 600; font-size: 0.85em; padding: 0; }
+.kota-sum .kota-warn-text { color: #f5a623; }
+.kota-qs-item { padding: 6px 12px; }
+.kota-qs-indicator-label { font-weight: bold; font-feature-settings: "tnum"; padding-left: 2px; }
+.kota-qs-indicator-label.kota-sev-warning { color: #ffc95c; }
+.kota-qs-indicator-label.kota-sev-critical { color: #ff7b6e; }
+.kota-qs-indicator-label.kota-sev-stale { opacity: 0.6; }
+.kota-datemenu-box { spacing: 10px; }
+.kota-datemenu-head { spacing: 8px; }
+.kota-datemenu-title { font-weight: 800; }
+
+/* ---------- Açık tema (Ayarlar → Görünüm → Tema; "Sistemle aynı" GNOME'un
+ * açık/koyu tercihini izler) ---------- */
+.kota-menu.kota-light .popup-menu-content {
+  background-color: #f6f7f9;
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.18);
+}
+.kota-menu.kota-light.kota-glass .popup-menu-content { box-shadow: none; }
+.kota-light .kota-root { color: #1f2328; }
+.kota-light .kota-title,
+.kota-light .kota-tile-value,
+.kota-light .kota-usage-value,
+.kota-light .kota-usage-bar-value,
+.kota-light .kota-card-title,
+.kota-light .kota-strong,
+.kota-light .kota-strong-small,
+.kota-light .kota-agent-name,
+.kota-light .kota-node-name,
+.kota-light .kota-usage-bar-name { color: #1f2328; }
+.kota-light .kota-tile-title,
+.kota-light .kota-card-right,
+.kota-light .kota-usage-caption { color: rgba(31, 35, 40, 0.8); }
+.kota-light .kota-dim,
+.kota-light .kota-usage-name,
+.kota-light .kota-usage-sub,
+.kota-light .kota-tile-unit,
+.kota-light .kota-tile-side,
+.kota-light .kota-tile-badge,
+.kota-light .kota-footer { color: rgba(31, 35, 40, 0.6); }
+.kota-light .kota-tile,
+.kota-light .kota-card,
+.kota-menu.kota-light.kota-glass .kota-card,
+.kota-menu.kota-light.kota-glass .kota-tile {
+  background-color: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+.kota-light .kota-usage-cell:hover { background-color: rgba(0, 0, 0, 0.05); }
+.kota-light .kota-usage-cell.selected { background-color: rgba(0, 0, 0, 0.07); }
+.kota-light .kota-detail { background-color: rgba(0, 0, 0, 0.045); }
+.kota-light .kota-chip { background-color: rgba(0, 0, 0, 0.08); color: rgba(31, 35, 40, 0.85); }
+.kota-light .kota-icon-btn { color: rgba(31, 35, 40, 0.75); }
+.kota-light .kota-icon-btn:hover { background-color: rgba(0, 0, 0, 0.07); color: #1f2328; }
+.kota-light .kota-stop { background-color: rgba(0, 0, 0, 0.06); }
+.kota-light .kota-go, .kota-light .kota-go:hover { color: #ffffff; }
+.kota-light .kota-agent-icon { background-color: #ffffff; border-color: rgba(0, 0, 0, 0.1); }
+.kota-light .kota-filter {
+  background-color: rgba(0, 0, 0, 0.04); border-color: rgba(0, 0, 0, 0.08); color: #1f2328;
+}
+.kota-light .kota-filter StIcon { color: rgba(31, 35, 40, 0.55); }
+.kota-light .kota-letter { color: #1f2328; background-color: rgba(0, 0, 0, 0.08); }
+.kota-light .kota-link, .kota-light .kota-usage-sub.kota-link { color: #0969da; }
+.kota-light .kota-chart-col:hover .kota-chart-bar { background-color: #1f2328; }
+.kota-light .kota-range { background-color: rgba(0, 0, 0, 0.05); }
+.kota-light .kota-range-btn { color: rgba(31, 35, 40, 0.7); }
+.kota-light .kota-range-btn:checked { background-color: #ffffff; color: #1f2328; }

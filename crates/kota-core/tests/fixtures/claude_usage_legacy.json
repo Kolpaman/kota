@@ -1,0 +1,27 @@
+{
+  "five_hour": {
+    "utilization": 93.0,
+    "resets_at": "2025-11-04T04:59:59.943648+00:00"
+  },
+  "seven_day": {
+    "utilization": 35.0,
+    "resets_at": "2025-11-06T03:59:59.943679+00:00"
+  },
+  "seven_day_oauth_apps": null,
+  "seven_day_opus": {
+    "utilization": 0.0,
+    "resets_at": null
+  },
+  "seven_day_future_model": {
+    "utilization": 12.5,
+    "resets_at": "2025-11-06T03:59:59Z"
+  },
+  "iguana_necktie": null,
+  "extra_usage": {
+    "is_enabled": true,
+    "monthly_limit": 5000,
+    "used_credits": 600,
+    "utilization": 12.0,
+    "currency": "USD"
+  }
+}

@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=io.github.mustazafi.Kota
+Exec=@BINDIR@/kota daemon
+SystemdService=kota.service

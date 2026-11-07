@@ -1,0 +1,4 @@
+/target
+/dist
+*.shell-extension.zip
+schemas/gschemas.compiled

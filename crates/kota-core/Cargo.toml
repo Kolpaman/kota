@@ -1,0 +1,23 @@
+[package]
+name = "kota-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+async-trait = "0.1.92"
+base64 = "0.23.1"
+chrono = { version = "0.4.45", features = ["serde"] }
+dirs = "7.0.0"
+log = "0.4.35"
+reqwest = { version = "0.13.5", default-features = false, features = ["json", "rustls"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+thiserror = "2.0.21"
+tokio = { version = "1.54.1", features = ["rt", "macros", "time", "fs", "sync"] }
+toml = "1.2.1"
+
+[dev-dependencies]
+tempfile = "3.27.0"
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros"] }
