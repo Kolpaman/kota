@@ -1,7 +1,7 @@
 {
   "uuid": "kota@ensignalp",
   "name": "Kota",
-  "description": "AI kullanım limitleri üst panelde: Claude, Codex, Gemini, GitHub Copilot, Z.ai, OpenRouter, DeepSeek, Kimi, SiliconFlow, OpenAI/Anthropic API. Yüzde halkaları, sıfırlanma ve tükenme tahmini, son 24 saat grafiği, çalışan AI ajanları. Verileri ayrı paketlenen `kota` servisinden (D-Bus) okur.\n\nAI usage limits in the top bar. Requires the separately installed `kota` service.",
+  "description": "Shows how much of your AI subscription limits you have used, right in the top bar: Claude and Codex plan windows (5-hour / weekly), Gemini daily quotas, GitHub Copilot premium requests, Z.ai, and API balances (OpenRouter, DeepSeek, Kimi, SiliconFlow, OpenAI/Anthropic).\n\nPercent rings with reset times and run-out forecasts, usage history, running AI agents per project, Quick Settings tile and calendar section. Turkish and English.\n\nIMPORTANT: this extension only displays data. It requires the separately installed `kota` service (D-Bus: io.github.ensignalp.Kota), which talks to the providers. Install it from https://github.com/ensignalp/kota (RPM or `make install`).\n\nTürkçe: AI kullanım limitleri üst panelde. Ayrı kurulan `kota` servisi gerekir.",
   "shell-version": [
     "48",
     "49",
