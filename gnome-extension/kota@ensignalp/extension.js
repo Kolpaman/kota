@@ -27,7 +27,7 @@ import {Strings, parseTime, resolveLanguage} from './lib/i18n.js';
 import {renderPanel} from './lib/panel.js';
 import {KotaPopup} from './lib/popup.js';
 import {KotaQuickSettings} from './lib/quicksettings.js';
-import {setBarMode, setLight} from './lib/widgets.js';
+import {clearIconCache, setBarMode, setLight} from './lib/widgets.js';
 
 /** Menü açıkken göreli zamanların ("3 sa 18 dk") yenilenme aralığı. */
 const TICK_SECONDS = 30;
@@ -208,6 +208,7 @@ export default class KotaExtension extends Extension {
         this._destroyQuickSettings();
         this._destroyDateMenu();
         this._ctx?.blur?.destroy();
+        clearIconCache();
         this._ctx = null;
         this._settings = null;
     }

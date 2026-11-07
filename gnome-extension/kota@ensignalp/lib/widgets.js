@@ -34,6 +34,11 @@ export function agentIconId(kind) {
 
 const gicons = new Map();
 
+/** Eklenti kapatılırken çağrılır: önbellekte nesne kalmasın. */
+export function clearIconCache() {
+    gicons.clear();
+}
+
 /** Sağlayıcı logosu; `colored` false ise tema rengine boyanan sembolik sürüm. */
 export function providerGicon(extPath, id, colored) {
     const key = `${id}:${colored}`;
