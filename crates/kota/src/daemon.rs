@@ -214,7 +214,7 @@ async fn emit(emitter: &SignalEmitter<'_>, json: &str) {
     }
 }
 
-#[zbus::interface(name = "io.github.mustazafi.Kota1")]
+#[zbus::interface(name = "io.github.ensignalp.Kota1")]
 impl KotaService {
     /// Son anlık görüntü (JSON). Henüz yoksa ilk sorgu beklenir.
     async fn get_snapshot(&self) -> String {

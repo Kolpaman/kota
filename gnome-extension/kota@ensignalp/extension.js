@@ -1,7 +1,7 @@
 // Kota — AI kullanım limitleri için GNOME Shell eklentisi.
 //
 // Eklenti hiçbir sağlayıcıya bağlanmaz ve token görmez: tüm veri ayrı
-// paketlenen `kota` servisinden (D-Bus: io.github.mustazafi.Kota) gelir.
+// paketlenen `kota` servisinden (D-Bus: io.github.ensignalp.Kota) gelir.
 //
 // Görünüm yerleri (hepsi ayarlardan açılıp kapanır):
 //   - üst panel göstergesi (konum + sıra)

@@ -6,7 +6,7 @@ After=graphical-session.target
 
 [Service]
 Type=dbus
-BusName=io.github.mustazafi.Kota
+BusName=io.github.ensignalp.Kota
 ExecStart=@BINDIR@/kota daemon
 Restart=on-failure
 RestartSec=10

@@ -1,9 +1,9 @@
 //! D-Bus sözleşmesi (oturum veriyolu).
 //!
 //! ```text
-//! servis:   io.github.mustazafi.Kota
-//! nesne:    /io/github/mustazafi/Kota
-//! arayüz:   io.github.mustazafi.Kota1
+//! servis:   io.github.ensignalp.Kota
+//! nesne:    /io/github/ensignalp/Kota
+//! arayüz:   io.github.ensignalp.Kota1
 //!   GetSnapshot() → s        son anlık görüntü (JSON, bkz. kota_core::model)
 //!   Refresh()     → s        şimdi sorgula (10 sn içinde tekrarlanırsa son sonuç)
 //!   Connect(s provider)      giriş için terminal aç
@@ -20,13 +20,13 @@ use std::time::Duration;
 
 use kota_core::model::{SCHEMA_VERSION, Snapshot};
 
-pub const BUS_NAME: &str = "io.github.mustazafi.Kota";
-pub const OBJECT_PATH: &str = "/io/github/mustazafi/Kota";
+pub const BUS_NAME: &str = "io.github.ensignalp.Kota";
+pub const OBJECT_PATH: &str = "/io/github/ensignalp/Kota";
 
 #[zbus::proxy(
-    interface = "io.github.mustazafi.Kota1",
-    default_service = "io.github.mustazafi.Kota",
-    default_path = "/io/github/mustazafi/Kota"
+    interface = "io.github.ensignalp.Kota1",
+    default_service = "io.github.ensignalp.Kota",
+    default_path = "/io/github/ensignalp/Kota"
 )]
 pub trait Kota {
     fn get_snapshot(&self) -> zbus::Result<String>;

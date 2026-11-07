@@ -10,7 +10,9 @@ use std::time::{Duration, Instant};
 use kota_core::providers::{EnvKeys, KeyStore};
 use kota_core::secret::Secret;
 
-const SERVICE: &str = "io.github.mustazafi.Kota";
+const SERVICE: &str = "io.github.ensignalp.Kota";
+/// 0.5.0 öncesi kayıtlar bu adla tutuluyordu; okunurken yeni ada taşınır.
+const LEGACY_SERVICE: &str = "io.github.mustazafi.Kota";
 /// Anahtarlığı her sorguda çağırmamak için kısa önbellek.
 const CACHE_TTL: Duration = Duration::from_secs(60);
 
@@ -91,14 +93,26 @@ fn run_tool(args: &[&str], stderr: bool) -> Option<(Vec<u8>, bool)> {
     Some((reader.join().unwrap_or_default(), status.success()))
 }
 
-fn lookup(provider: &str) -> Option<Secret> {
-    let (out, ok) = run_tool(&["lookup", "service", SERVICE, "provider", provider], false)?;
-    if !ok {
-        return None;
-    }
+fn lookup_in(service: &str, provider: &str) -> Option<String> {
+    let (out, ok) = run_tool(&["lookup", "service", service, "provider", provider], false)?;
     let s = String::from_utf8(out).ok()?;
     let s = s.trim();
-    (!s.is_empty()).then(|| Secret::new(s))
+    (ok && !s.is_empty()).then(|| s.to_string())
+}
+
+fn lookup(provider: &str) -> Option<Secret> {
+    if let Some(s) = lookup_in(SERVICE, provider) {
+        return Some(Secret::new(s));
+    }
+    // Eski ad: yeni ada taşı (başarısız olursa yine de değeri kullan).
+    let old = lookup_in(LEGACY_SERVICE, provider)?;
+    if store(provider, &old).is_ok() {
+        let _ = Command::new("secret-tool")
+            .args(["clear", "service", LEGACY_SERVICE, "provider", provider])
+            .stdin(Stdio::null())
+            .status();
+    }
+    Some(Secret::new(old))
 }
 
 pub fn env_key(provider: &str) -> bool {
@@ -112,14 +126,19 @@ pub fn has_key(provider: &str) -> bool {
 /// Anahtarı kayıtlı sağlayıcılar (tek sorgu). secret-tool öznitelikleri
 /// stderr'e, gizli değeri stdout'a yazar; yalnız stderr okunur.
 pub fn stored_providers() -> std::collections::HashSet<String> {
-    let Some((out, _)) = run_tool(&["search", "--all", "service", SERVICE], true) else {
-        return Default::default();
-    };
-    String::from_utf8_lossy(&out)
-        .lines()
-        .filter_map(|l| l.strip_prefix("attribute.provider = "))
-        .map(|p| p.trim().to_string())
-        .collect()
+    let mut set = std::collections::HashSet::new();
+    for service in [SERVICE, LEGACY_SERVICE] {
+        let Some((out, _)) = run_tool(&["search", "--all", "service", service], true) else {
+            continue;
+        };
+        set.extend(
+            String::from_utf8_lossy(&out)
+                .lines()
+                .filter_map(|l| l.strip_prefix("attribute.provider = "))
+                .map(|p| p.trim().to_string()),
+        );
+    }
+    set
 }
 
 pub fn store(provider: &str, key: &str) -> Result<(), String> {
@@ -160,6 +179,10 @@ pub fn store(provider: &str, key: &str) -> Result<(), String> {
 }
 
 pub fn clear(provider: &str) -> Result<(), String> {
+    let _ = Command::new("secret-tool")
+        .args(["clear", "service", LEGACY_SERVICE, "provider", provider])
+        .stdin(Stdio::null())
+        .status();
     let status = Command::new("secret-tool")
         .args(["clear", "service", SERVICE, "provider", provider])
         .stdin(Stdio::null())
@@ -177,7 +200,8 @@ pub fn clear(provider: &str) -> Result<(), String> {
 //
 // Ayrı bir `service` özniteliği: API anahtarı aramaları profilleri görmez.
 
-const PROFILE_SERVICE: &str = "io.github.mustazafi.Kota.account";
+const PROFILE_SERVICE: &str = "io.github.ensignalp.Kota.account";
+const LEGACY_PROFILE_SERVICE: &str = "io.github.mustazafi.Kota.account";
 
 pub fn profile_store(provider: &str, name: &str, data: &str) -> Result<(), String> {
     let mut child = Command::new("secret-tool")
@@ -212,20 +236,22 @@ pub fn profile_store(provider: &str, name: &str, data: &str) -> Result<(), Strin
 }
 
 pub fn profile_get(provider: &str, name: &str) -> Option<String> {
-    let (out, ok) = run_tool(
-        &["lookup", "service", PROFILE_SERVICE, "provider", provider, "profile", name],
-        false,
-    )?;
-    let s = String::from_utf8(out).ok()?;
-    (ok && !s.trim().is_empty()).then(|| s.trim().to_string())
+    [PROFILE_SERVICE, LEGACY_PROFILE_SERVICE].iter().find_map(|service| {
+        let (out, ok) = run_tool(&["lookup", "service", service, "provider", provider, "profile", name], false)?;
+        let s = String::from_utf8(out).ok()?;
+        (ok && !s.trim().is_empty()).then(|| s.trim().to_string())
+    })
 }
 
 /// (sağlayıcı, profil adı) çiftleri; gizli değerler okunmaz.
 pub fn profile_list() -> Vec<(String, String)> {
-    let Some((out, _)) = run_tool(&["search", "--all", "service", PROFILE_SERVICE], true) else {
-        return Vec::new();
-    };
-    let text = String::from_utf8_lossy(&out);
+    let mut text = String::new();
+    for service in [PROFILE_SERVICE, LEGACY_PROFILE_SERVICE] {
+        if let Some((out, _)) = run_tool(&["search", "--all", "service", service], true) {
+            text.push_str(&String::from_utf8_lossy(&out));
+            text.push_str("\n[end]\n");
+        }
+    }
     let mut v = Vec::new();
     let (mut provider, mut profile) = (None, None);
     for l in text.lines() {
@@ -248,6 +274,10 @@ pub fn profile_list() -> Vec<(String, String)> {
 }
 
 pub fn profile_clear(provider: &str, name: &str) -> Result<(), String> {
+    let _ = Command::new("secret-tool")
+        .args(["clear", "service", LEGACY_PROFILE_SERVICE, "provider", provider, "profile", name])
+        .stdin(Stdio::null())
+        .status();
     let status = Command::new("secret-tool")
         .args(["clear", "service", PROFILE_SERVICE, "provider", provider, "profile", name])
         .stdin(Stdio::null())

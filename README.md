@@ -65,7 +65,7 @@ Codex · Free  ● bağlı · 23:56
  Claude API ─┐                         ┌─ GNOME eklentisi (panel + menü)
  Codex API  ─┤   kota daemon           │
  ~/.claude   ├─► (kota-core, Rust) ──D-Bus─┤
- ~/.codex    ┘   io.github.mustazafi.Kota  ├─ kota / kota --json
+ ~/.codex    ┘   io.github.ensignalp.Kota  ├─ kota / kota --json
                                        └─ kota --waybar
 ```
 
@@ -73,7 +73,7 @@ Codex · Free  ● bağlı · 23:56
   ileride macOS'a taşınabilir). Sağlayıcı eklemek: `src/providers/` altına bir
   modül + `providers::build` içine bir satır.
 - `crates/kota`: CLI ve D-Bus servisi (tek binary).
-- `gnome-extension/kota@mustazafi`: GNOME 48–50 eklentisi. **Binary içermez**;
+- `gnome-extension/kota@ensignalp`: GNOME 48–50 eklentisi. **Binary içermez**;
   yalnızca servisi dinler (extensions.gnome.org kuralı).
 
 ## Kurulum (kullanıcı düzeyi, sudo gerekmez)

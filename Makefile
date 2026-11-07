@@ -8,7 +8,7 @@ BINDIR ?= $(PREFIX)/bin
 DATADIR ?= $(PREFIX)/share
 SYSTEMD_USER_DIR ?= $(HOME)/.config/systemd/user
 DBUS_SERVICES_DIR ?= $(DATADIR)/dbus-1/services
-UUID := kota@mustazafi
+UUID := kota@ensignalp
 EXT_SRC := gnome-extension/$(UUID)
 EXT_DIR ?= $(DATADIR)/gnome-shell/extensions/$(UUID)
 CARGO ?= cargo
@@ -31,12 +31,15 @@ install-service: build
 	install -Dm755 target/release/kota $(BINDIR)/kota
 	install -d $(SYSTEMD_USER_DIR) $(DBUS_SERVICES_DIR)
 	sed 's|@BINDIR@|$(BINDIR)|g' packaging/systemd/kota.service > $(SYSTEMD_USER_DIR)/kota.service
-	sed 's|@BINDIR@|$(BINDIR)|g' packaging/dbus/io.github.mustazafi.Kota.service > $(DBUS_SERVICES_DIR)/io.github.mustazafi.Kota.service
+	sed 's|@BINDIR@|$(BINDIR)|g' packaging/dbus/io.github.ensignalp.Kota.service > $(DBUS_SERVICES_DIR)/io.github.ensignalp.Kota.service
+	rm -f $(DBUS_SERVICES_DIR)/io.github.mustazafi.Kota.service  # 0.5.0 öncesi ad
 	systemctl --user daemon-reload
 	systemctl --user enable kota.service
 	systemctl --user restart kota.service
 
 install-extension:
+	-gnome-extensions disable kota@mustazafi 2>/dev/null  # 0.5.0 öncesi kimlik
+	rm -rf $(DATADIR)/gnome-shell/extensions/kota@mustazafi
 	rm -rf $(EXT_DIR)
 	install -d $(EXT_DIR)
 	cp -r $(EXT_SRC)/. $(EXT_DIR)/
@@ -46,7 +49,7 @@ install-extension:
 uninstall:
 	-gnome-extensions disable $(UUID)
 	-systemctl --user disable --now kota.service
-	rm -f $(SYSTEMD_USER_DIR)/kota.service $(DBUS_SERVICES_DIR)/io.github.mustazafi.Kota.service $(BINDIR)/kota
+	rm -f $(SYSTEMD_USER_DIR)/kota.service $(DBUS_SERVICES_DIR)/io.github.ensignalp.Kota.service $(BINDIR)/kota
 	rm -rf $(EXT_DIR)
 	-systemctl --user daemon-reload
 

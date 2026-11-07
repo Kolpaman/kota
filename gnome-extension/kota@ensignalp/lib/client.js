@@ -4,14 +4,14 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
-export const BUS_NAME = 'io.github.mustazafi.Kota';
-export const OBJECT_PATH = '/io/github/mustazafi/Kota';
+export const BUS_NAME = 'io.github.ensignalp.Kota';
+export const OBJECT_PATH = '/io/github/ensignalp/Kota';
 const SCHEMA_VERSION = 1;
 const RETRY_SECONDS = 30;
 
 const KotaIface = `
 <node>
-  <interface name="io.github.mustazafi.Kota1">
+  <interface name="io.github.ensignalp.Kota1">
     <method name="GetSnapshot"><arg type="s" name="snapshot" direction="out"/></method>
     <method name="Refresh"><arg type="s" name="snapshot" direction="out"/></method>
     <method name="Connect"><arg type="s" name="provider" direction="in"/></method>

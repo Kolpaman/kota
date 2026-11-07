@@ -2,10 +2,10 @@
 # COPR'da "Enable internet access during builds" açık olmalı (cargo bağımlılıkları
 # derleme sırasında indirilir) ya da kaynak arşivi `cargo vendor` ile hazırlanmalı.
 
-%global uuid kota@mustazafi
+%global uuid kota@ensignalp
 
 Name:           kota
-Version:        0.5.0
+Version:        0.5.1
 Release:        1%{?dist}
 Summary:        AI usage limits in the GNOME top bar (Claude, Codex, Gemini, Copilot…)
 License:        MIT
@@ -45,8 +45,8 @@ cargo build --release --locked
 install -Dm755 target/release/kota %{buildroot}%{_bindir}/kota
 sed 's|@BINDIR@|%{_bindir}|g' packaging/systemd/kota.service \
     | install -Dm644 /dev/stdin %{buildroot}%{_userunitdir}/kota.service
-sed 's|@BINDIR@|%{_bindir}|g' packaging/dbus/io.github.mustazafi.Kota.service \
-    | install -Dm644 /dev/stdin %{buildroot}%{_datadir}/dbus-1/services/io.github.mustazafi.Kota.service
+sed 's|@BINDIR@|%{_bindir}|g' packaging/dbus/io.github.ensignalp.Kota.service \
+    | install -Dm644 /dev/stdin %{buildroot}%{_datadir}/dbus-1/services/io.github.ensignalp.Kota.service
 install -d %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}
 cp -r gnome-extension/%{uuid}/. %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}/
 rm -rf %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}/schemas
@@ -67,7 +67,7 @@ cargo test --release --locked --workspace
 %doc README.md config.example.toml
 %{_bindir}/kota
 %{_userunitdir}/kota.service
-%{_datadir}/dbus-1/services/io.github.mustazafi.Kota.service
+%{_datadir}/dbus-1/services/io.github.ensignalp.Kota.service
 
 %files -n gnome-shell-extension-kota
 %license LICENSE
@@ -75,6 +75,10 @@ cargo test --release --locked --workspace
 %{_datadir}/glib-2.0/schemas/org.gnome.shell.extensions.kota.gschema.xml
 
 %changelog
+* Sat Nov 07 2026 Muhammed Alparslan <ensignalp@users.noreply.github.com> - 0.5.1-1
+- Rename identifiers to ensignalp: extension kota@ensignalp, D-Bus
+  io.github.ensignalp.Kota. Stored keys and profiles migrate automatically.
+
 * Sat Nov 07 2026 Muhammed Alparslan <ensignalp@users.noreply.github.com> - 0.5.0-1
 - Usage history (7/30 days), per-agent tokens, account profiles, run-out
   warnings, light theme, limit-aware colors, Kota logo panel option.
