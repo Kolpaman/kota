@@ -4,6 +4,22 @@ AI hizmetlerinin kullanım limitlerini GNOME üst panelinde gösterir: orijinal
 logolarla yüzde, halka göstergeler, sıfırlanma ve "bu hızla dolar" tahmini, son
 24 saatin token grafiği ve çalışan AI ajanları (proje, bellek, portlar, durdur).
 
+<p align="center">
+  <img src="docs/screenshots/menu.png" width="420" alt="Kota açılır penceresi: özet kutucukları, AI kullanımı halkası, son 24 saat grafiği, çalışan ajanlar">
+</p>
+
+## Ekran görüntüleri
+
+| Sağlayıcılar ve hesaplar | Yerleşim |
+| --- | --- |
+| <img src="docs/screenshots/ayarlar-saglayicilar.png" width="400" alt="Sağlayıcılar ve hesap profilleri"> | <img src="docs/screenshots/ayarlar-yerlesim.png" width="400" alt="Üst panel, Hızlı Ayarlar ve tarih penceresi yerleşimi"> |
+| **Görünüm** | **Bildirimler** |
+| <img src="docs/screenshots/ayarlar-gorunum.png" width="400" alt="Panel biçimi, pencere harfleri, tema, çubuk renkleri"> | <img src="docs/screenshots/ayarlar-bildirimler.png" width="400" alt="Eşik, sıfırlanma, oturum ve tükenme bildirimleri"> |
+| **Servis** | |
+| <img src="docs/screenshots/ayarlar-servis.png" width="400" alt="Yenileme aralığı, token yenileme, yerel loglar, dil ve kısayol"> | |
+
+## Desteklenen sağlayıcılar
+
 | Sağlayıcı | Giriş | Gösterilen |
 | --- | --- | --- |
 | Claude, Codex | CLI girişi (otomatik bulunur) | plan limitleri (%) |
@@ -169,7 +185,7 @@ otomatik gösterilir); API bozulursa yerel loglara ve son bilinen değere düş�
 ## Geliştirme
 
 ```sh
-make test          # 101 test: gerçek yanıt fixture'ları, sahte HTTP sunucusuyla token yenileme/kilit/CAS
+make test          # 102 test: gerçek yanıt fixture'ları, sahte HTTP sunucusuyla token yenileme/kilit/CAS
 cargo clippy --workspace --all-targets
 make pack          # extensions.gnome.org için zip (dist/)
 make rpm           # Fedora RPM (packaging/rpm/kota.spec) · yayın: docs/YAYIN.md

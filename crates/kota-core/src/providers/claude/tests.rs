@@ -200,6 +200,39 @@ async fn rate_limit_backs_off() {
 }
 
 #[tokio::test]
+async fn polls_at_most_every_two_minutes_and_rides_out_rate_limits() {
+    let dir = tempfile::tempdir().unwrap();
+    write_creds(dir.path(), "a1", "r1", Duration::hours(3));
+    // İlk sorgu başarılı, sonrakiler 429.
+    let hits = std::sync::Arc::new(std::sync::atomic::AtomicUsize::new(0));
+    let h = hits.clone();
+    let srv = FakeServer::start(move |_| {
+        if h.fetch_add(1, std::sync::atomic::Ordering::SeqCst) == 0 {
+            (200, FIXTURE.to_string())
+        } else {
+            (429, r#"{"error":"rate_limited"}"#.to_string())
+        }
+    });
+    let mut p = provider(dir.path(), &srv, true);
+    p.min_interval = MIN_INTERVAL_SECS;
+    p.grace = RATE_LIMIT_GRACE_SECS;
+    let now = Utc::now();
+    assert_eq!(p.fetch(&ctx(now)).await.status, Status::Ok);
+    // 60 sn sonra: sunucuya gitmeden son yanıt.
+    let r = p.fetch(&ctx(now + Duration::seconds(60))).await;
+    assert_eq!(r.status, Status::Ok);
+    assert_eq!(srv.count("/usage"), 1);
+    // 3 dk sonra: sunucu 429 der, ama 10 dk içindeki son yanıt hata göstermeden kullanılır.
+    let r = p.fetch(&ctx(now + Duration::seconds(180))).await;
+    assert_eq!(r.status, Status::Ok, "{:?}", r.message);
+    assert_eq!(r.windows.len(), 2);
+    assert_eq!(srv.count("/usage"), 2);
+    // 15 dk sonra: son yanıt bayat, hız sınırı gösterilir.
+    let r = p.fetch(&ctx(now + Duration::seconds(900))).await;
+    assert_eq!(r.code.as_deref(), Some("rate_limited"));
+}
+
+#[tokio::test]
 async fn not_connected_without_credentials() {
     let dir = tempfile::tempdir().unwrap();
     let srv = server("a1", 500, "{}");

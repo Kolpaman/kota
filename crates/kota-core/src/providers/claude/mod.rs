@@ -31,6 +31,11 @@ pub const LOGIN_COMMAND: &[&str] = &["claude", "auth", "login"];
 
 /// Hız sınırında `Retry-After` yoksa beklenecek süre.
 const DEFAULT_BACKOFF_SECS: i64 = 300;
+/// Anthropic'in kullanım servisi yaklaşık iki dakikada bir sorguya izin
+/// veriyor; daha sık sorgular 429 alır. Bu süre dolmadan son yanıt kullanılır.
+const MIN_INTERVAL_SECS: i64 = 110;
+/// Hız sınırına takılınca bu kadar yeni bir başarılı yanıt hata göstermeden kullanılır.
+const RATE_LIMIT_GRACE_SECS: i64 = 600;
 /// Kilit meşgulken (Claude Code yeniliyor) kaç kez beklenecek.
 const BUSY_RETRIES: usize = 4;
 
@@ -41,6 +46,10 @@ pub struct ClaudeProvider {
     token_url: String,
     scanner: Option<Arc<Mutex<ClaudeLogScanner>>>,
     backoff: Backoff,
+    /// Son başarılı kullanım yanıtı ve zamanı.
+    last_ok: Mutex<Option<(DateTime<Utc>, Value)>>,
+    min_interval: i64,
+    grace: i64,
 }
 
 impl ClaudeProvider {
@@ -58,13 +67,27 @@ impl ClaudeProvider {
             token_url: auth::TOKEN_URL.to_string(),
             scanner,
             backoff: Backoff::default(),
+            last_ok: Mutex::new(None),
+            min_interval: MIN_INTERVAL_SECS,
+            grace: RATE_LIMIT_GRACE_SECS,
         }
+    }
+
+    /// `max_age` saniyeden yeni son başarılı yanıt.
+    fn recent(&self, now: DateTime<Utc>, max_age: i64) -> Option<Value> {
+        let g = self.last_ok.lock().unwrap_or_else(|e| e.into_inner());
+        g.as_ref()
+            .filter(|(at, _)| max_age > 0 && (now - *at).num_seconds() < max_age)
+            .map(|(_, v)| v.clone())
     }
 
     /// Testler için: sahte sunucu adresleri.
     pub fn with_endpoints(mut self, usage_url: impl Into<String>, token_url: impl Into<String>) -> Self {
         self.usage_url = usage_url.into();
         self.token_url = token_url.into();
+        // Testler her sorguda sunucuya gitmeli.
+        self.min_interval = 0;
+        self.grace = 0;
         self
     }
 
@@ -148,7 +171,13 @@ impl ClaudeProvider {
     }
 
     async fn fetch_usage(&self, ctx: &FetchContext, mut creds: ClaudeCredentials) -> Result<Value, Failure> {
+        if let Some(v) = self.recent(ctx.now, self.min_interval) {
+            return Ok(v);
+        }
         if let Some(until) = self.backoff.active_until(ctx.now) {
+            if let Some(v) = self.recent(ctx.now, self.grace) {
+                return Ok(v);
+            }
             return Err(Failure::error(
                 "rate_limited",
                 format!("Rate limited; next attempt after {}", until.format("%H:%M UTC")),
@@ -176,6 +205,7 @@ impl ClaudeProvider {
         match result {
             Ok(v) => {
                 self.backoff.clear();
+                *self.last_ok.lock().unwrap_or_else(|e| e.into_inner()) = Some((ctx.now, v.clone()));
                 Ok(v)
             }
             Err(FetchError::Unauthorized(code)) => Err(Failure::expired(
@@ -188,6 +218,10 @@ impl ClaudeProvider {
                     .unwrap_or(DEFAULT_BACKOFF_SECS)
                     .clamp(60, 3600);
                 self.backoff.set(ctx.now + Duration::seconds(wait));
+                if let Some(v) = self.recent(ctx.now, self.grace) {
+                    log::debug!("claude: rate limited; using the response from the last {}s", self.grace);
+                    return Ok(v);
+                }
                 Err(Failure::error(
                     "rate_limited",
                     format!("Rate limited by Anthropic; retrying in {wait}s"),
