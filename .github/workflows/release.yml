@@ -1,0 +1,83 @@
+# Her push'ta test; `v*` etiketinde tüm Linux paketlerini üretip sürüme ekler:
+#   kota-<sürüm>-<x86_64|aarch64>-linux.tar.gz  (statik ikili + install.sh)
+#   kota_<sürüm>_<amd64|arm64>.deb               (Debian, Ubuntu, Mint, Pop!_OS…)
+#   kota-<sürüm>-1.*.rpm                         (Fedora, openSUSE, RHEL…)
+#   kota@ensignalp.shell-extension.zip           (extensions.gnome.org)
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  static:
+    strategy:
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-latest
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test ve statik derleme (Alpine/musl)
+        run: |
+          docker run --rm -v "$PWD":/src -w /src rust:alpine sh -euc '
+            apk add --no-cache musl-dev gcc make cmake perl dpkg coreutils zip tar >/dev/null
+            cargo test --locked --workspace
+            cargo build --release --locked
+            strip -o /src/kota-bin target/release/kota
+            ver=$(sed -n "s/^version = \"\(.*\)\"/\1/p" Cargo.toml | head -1)
+            sh scripts/dist-tarball.sh /src/kota-bin ${{ matrix.arch }} "$ver"
+            sh scripts/build-deb.sh /src/kota-bin ${{ matrix.arch }} "$ver"
+            if [ ${{ matrix.arch }} = x86_64 ]; then
+              (cd gnome-extension/kota@ensignalp && zip -qr ../../dist/kota@ensignalp.shell-extension.zip . -x schemas/gschemas.compiled)
+            fi
+            chown -R '"$(id -u):$(id -g)"' dist target
+          '
+      - uses: actions/upload-artifact@v4
+        with:
+          name: static-${{ matrix.arch }}
+          path: dist/*
+
+  rpm:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: RPM
+        run: |
+          dnf -y -q install rpm-build cargo rust gcc systemd-rpm-macros glib2 tar make
+          make tarball
+          rpmbuild -ba packaging/rpm/kota.spec \
+            --define "_sourcedir $PWD/dist" --define "_rpmdir $PWD/dist" --define "_srcrpmdir $PWD/dist"
+          find dist -name '*.rpm' ! -name '*debug*' -exec mv {} dist/ \;
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rpm
+          path: |
+            dist/*.rpm
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [static, rpm]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+          merge-multiple: true
+      - name: Sürüme ekle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ls -la out
+          gh release view "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
+            || gh release create "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" --title "Kota ${GITHUB_REF_NAME#v}" --generate-notes
+          gh release upload "$GITHUB_REF_NAME" -R "$GITHUB_REPOSITORY" --clobber out/*

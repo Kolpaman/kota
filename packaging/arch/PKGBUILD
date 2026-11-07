@@ -1,0 +1,46 @@
+# Maintainer: Muhammed Alparslan <ensignalp at users dot noreply dot github dot com>
+pkgname=kota
+pkgver=0.6.0
+pkgrel=1
+pkgdesc="AI usage limits in the GNOME top bar (Claude, Codex, Gemini, Copilot, API balances)"
+arch=('x86_64' 'aarch64')
+url="https://github.com/ensignalp/kota"
+license=('MIT')
+depends=('gcc-libs' 'glibc')
+optdepends=('gnome-shell: top bar extension'
+            'libsecret: store API keys in GNOME Keyring')
+makedepends=('cargo')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+prepare() {
+    cd "$pkgname-$pkgver"
+    export RUSTUP_TOOLCHAIN=stable
+    cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+}
+
+build() {
+    cd "$pkgname-$pkgver"
+    export RUSTUP_TOOLCHAIN=stable CARGO_TARGET_DIR=target
+    cargo build --frozen --release
+}
+
+check() {
+    cd "$pkgname-$pkgver"
+    cargo test --frozen --release --workspace
+}
+
+package() {
+    cd "$pkgname-$pkgver"
+    local uuid=kota@ensignalp
+    install -Dm755 target/release/kota "$pkgdir/usr/bin/kota"
+    sed 's|@BINDIR@|/usr/bin|g' packaging/systemd/kota.service | install -Dm644 /dev/stdin "$pkgdir/usr/lib/systemd/user/kota.service"
+    sed 's|@BINDIR@|/usr/bin|g' packaging/dbus/io.github.ensignalp.Kota.service \
+        | install -Dm644 /dev/stdin "$pkgdir/usr/share/dbus-1/services/io.github.ensignalp.Kota.service"
+    install -d "$pkgdir/usr/share/gnome-shell/extensions/$uuid"
+    cp -r "gnome-extension/$uuid/." "$pkgdir/usr/share/gnome-shell/extensions/$uuid/"
+    rm -rf "$pkgdir/usr/share/gnome-shell/extensions/$uuid/schemas"
+    install -Dm644 "gnome-extension/$uuid/schemas/org.gnome.shell.extensions.kota.gschema.xml" \
+        "$pkgdir/usr/share/glib-2.0/schemas/org.gnome.shell.extensions.kota.gschema.xml"
+    install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

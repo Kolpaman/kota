@@ -86,6 +86,8 @@ fn terminal_candidates(script: &str) -> Vec<Vec<String>> {
         }
     }
     v.push(with(&["xdg-terminal-exec"]));
+    // Debian/Ubuntu'nun seçili terminali
+    v.push(with(&["x-terminal-emulator", "-e"]));
     v.push(with(&["ptyxis", "--"]));
     v.push(with(&["kgx", "--"]));
     v.push(with(&["gnome-terminal", "--"]));
@@ -94,6 +96,13 @@ fn terminal_candidates(script: &str) -> Vec<Vec<String>> {
     v.push(with(&["alacritty", "-e"]));
     v.push(with(&["foot"]));
     v.push(with(&["wezterm", "start", "--"]));
+    v.push(with(&["xfce4-terminal", "-x"]));
+    v.push(with(&["mate-terminal", "-x"]));
+    v.push(with(&["tilix", "-e"]));
+    v.push(with(&["terminator", "-x"]));
+    v.push(with(&["lxterminal", "-e"]));
+    v.push(with(&["qterminal", "-e"]));
+    v.push(with(&["ghostty", "-e"]));
     v.push(with(&["xterm", "-e"]));
     v
 }

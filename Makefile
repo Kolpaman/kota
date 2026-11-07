@@ -33,9 +33,9 @@ install-service: build
 	sed 's|@BINDIR@|$(BINDIR)|g' packaging/systemd/kota.service > $(SYSTEMD_USER_DIR)/kota.service
 	sed 's|@BINDIR@|$(BINDIR)|g' packaging/dbus/io.github.ensignalp.Kota.service > $(DBUS_SERVICES_DIR)/io.github.ensignalp.Kota.service
 	rm -f $(DBUS_SERVICES_DIR)/io.github.mustazafi.Kota.service  # 0.5.0 öncesi ad
-	systemctl --user daemon-reload
-	systemctl --user enable kota.service
-	systemctl --user restart kota.service
+	@if command -v systemctl >/dev/null && systemctl --user show-environment >/dev/null 2>&1; then \
+	  systemctl --user daemon-reload; systemctl --user enable kota.service; systemctl --user restart kota.service; \
+	else echo "systemd yok: servis ilk kullanımda D-Bus tarafından başlatılacak."; fi
 
 install-extension:
 	-gnome-extensions disable kota@mustazafi 2>/dev/null  # 0.5.0 öncesi kimlik
@@ -48,10 +48,10 @@ install-extension:
 
 uninstall:
 	-gnome-extensions disable $(UUID)
-	-systemctl --user disable --now kota.service
+	-systemctl --user disable --now kota.service 2>/dev/null
 	rm -f $(SYSTEMD_USER_DIR)/kota.service $(DBUS_SERVICES_DIR)/io.github.ensignalp.Kota.service $(BINDIR)/kota
 	rm -rf $(EXT_DIR)
-	-systemctl --user daemon-reload
+	-systemctl --user daemon-reload 2>/dev/null
 
 pack:
 	install -d dist

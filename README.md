@@ -76,16 +76,38 @@ Codex · Free  ● bağlı · 23:56
 - `gnome-extension/kota@ensignalp`: GNOME 48–50 eklentisi. **Binary içermez**;
   yalnızca servisi dinler (extensions.gnome.org kuralı).
 
-## Kurulum (kullanıcı düzeyi, sudo gerekmez)
+## Kurulum
 
-Gereken: Rust (cargo), GNOME Shell 48+.
+Kota her Linux dağıtımında çalışır: servis **statik** bir ikilidir (glibc/OpenSSL
+bağımlılığı yok, x86_64 ve aarch64), eklenti GNOME Shell 48–50 ister. GNOME
+kullanmıyorsanız CLI ve Waybar modülü yine çalışır.
+
+**Tek komut (her dağıtım, sudo gerekmez):**
 
 ```sh
-make install     # ~/.local/bin/kota, systemd kullanıcı servisi, D-Bus etkinleştirme, eklenti
-make uninstall
+curl -fsSL https://raw.githubusercontent.com/ensignalp/kota/main/install.sh | sh
 ```
 
-Wayland'da yeni kurulan eklenti, oturumu kapatıp açınca görünür.
+`~/.local/bin/kota`, D-Bus etkinleştirme dosyası, systemd kullanıcı birimi (systemd
+varsa; yoksa servis D-Bus ile kendiliğinden başlar) ve GNOME eklentisini kurar.
+Kaldırmak: `… | sh -s -- --uninstall`.
+
+**Paketler** ([Sürümler](https://github.com/ensignalp/kota/releases)):
+
+| Dağıtım | Komut |
+| --- | --- |
+| Debian, Ubuntu, Mint, Pop!_OS, Zorin, elementary | `sudo apt install ./kota_<sürüm>_amd64.deb` |
+| Fedora, RHEL, openSUSE | `sudo dnf install ./kota-<sürüm>-1.*.rpm ./gnome-shell-extension-kota-*.rpm` |
+| Arch, Manjaro, EndeavourOS | `packaging/arch/PKGBUILD` ile `makepkg -si` |
+| Diğer (Alpine, Void, Gentoo, NixOS…) | `kota-<sürüm>-<mimari>-linux.tar.gz` içinden `./install.sh` |
+
+Paketle kurduktan sonra: `systemctl --user enable --now kota`, ardından oturumu
+kapatıp açın (Wayland'da yeni eklenti ancak böyle görünür).
+
+İsteğe bağlı: API anahtarlarını GNOME Anahtarlığı'nda saklamak için `secret-tool`
+(`libsecret-tools` / `libsecret`). Claude, Codex, Gemini ve Copilot girişleri bunsuz da çalışır.
+
+**Kaynaktan** (Rust gerekir): `make install` · `make uninstall`
 
 ## Kullanım
 

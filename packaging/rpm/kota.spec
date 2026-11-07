@@ -5,7 +5,7 @@
 %global uuid kota@ensignalp
 
 Name:           kota
-Version:        0.5.1
+Version:        0.6.0
 Release:        1%{?dist}
 Summary:        AI usage limits in the GNOME top bar (Claude, Codex, Gemini, Copilot…)
 License:        MIT
@@ -75,6 +75,10 @@ cargo test --release --locked --workspace
 %{_datadir}/glib-2.0/schemas/org.gnome.shell.extensions.kota.gschema.xml
 
 %changelog
+* Sun Nov 08 2026 Muhammed Alparslan <ensignalp@users.noreply.github.com> - 0.6.0-1
+- Builds for every Linux distribution: static binary, .deb, Arch PKGBUILD,
+  universal install.sh; fall back to bundled CA roots; more terminals.
+
 * Sat Nov 07 2026 Muhammed Alparslan <ensignalp@users.noreply.github.com> - 0.5.1-1
 - Rename identifiers to ensignalp: extension kota@ensignalp, D-Bus
   io.github.ensignalp.Kota. Stored keys and profiles migrate automatically.

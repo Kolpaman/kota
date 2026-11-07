@@ -13,13 +13,30 @@ pub fn user_agent() -> String {
     format!("kota/{} (+https://github.com/ensignalp/kota)", crate::VERSION)
 }
 
-pub fn build_client() -> Client {
+fn builder() -> reqwest::ClientBuilder {
     Client::builder()
         .user_agent(user_agent())
         .timeout(Duration::from_secs(20))
         .connect_timeout(Duration::from_secs(10))
-        .build()
-        .unwrap_or_else(|_| Client::new())
+}
+
+/// Sistem sertifika deposunu kullanır; dağıtımda CA paketi yoksa ya da
+/// okunamıyorsa (minimal kurulumlar, bazı konteynerler) gömülü Mozilla kök
+/// sertifikalarına düşer (eskiden bu durumda servis çöküyordu).
+pub fn build_client() -> Client {
+    match builder().build() {
+        Ok(c) => c,
+        Err(e) => {
+            log::warn!("system CA certificates unavailable ({e}); using bundled Mozilla roots");
+            let roots = webpki_root_certs::TLS_SERVER_ROOT_CERTS
+                .iter()
+                .filter_map(|c| reqwest::Certificate::from_der(c.as_ref()).ok());
+            builder()
+                .tls_certs_only(roots)
+                .build()
+                .unwrap_or_else(|e| panic!("HTTP client could not be built: {e}"))
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, thiserror::Error)]

@@ -3,7 +3,7 @@ resolver = "3"
 members = ["crates/kota-core", "crates/kota"]
 
 [workspace.package]
-version = "0.5.1"
+version = "0.6.0"
 edition = "2024"
 license = "MIT"
 repository = "https://github.com/ensignalp/kota"

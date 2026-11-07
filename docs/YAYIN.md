@@ -1,5 +1,19 @@
 # Yayın rehberi
 
+**Otomatik:** `git tag v<sürüm> && git push origin v<sürüm>` → GitHub Actions
+(`.github/workflows/release.yml`) statik ikilileri (x86_64, aarch64), `.tar.gz`,
+`.deb`, `.rpm` ve eklenti zip'ini üretip sürüme ekler. Sürüm numarası:
+`Cargo.toml`, `metadata.json`, `packaging/rpm/kota.spec`, `packaging/arch/PKGBUILD`.
+
+## AUR (Arch)
+
+```sh
+git clone ssh://aur@aur.archlinux.org/kota.git aur-kota && cd aur-kota
+cp ../packaging/arch/PKGBUILD . && updpkgsums && makepkg --printsrcinfo > .SRCINFO
+git add PKGBUILD .SRCINFO && git commit -m "kota <sürüm>" && git push
+```
+(AUR hesabı ve SSH anahtarı gerekir.)
+
 Hazır çıktılar `make pack`, `make tarball` ve `make rpm` ile `dist/` altına üretilir.
 
 ## 1. GitHub
