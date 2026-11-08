@@ -21,7 +21,7 @@ build:
 	$(CARGO) build --release --locked
 
 test:
-	$(CARGO) test --workspace --locked
+	$(CARGO) test --locked
 
 install: install-service install-extension
 	@echo

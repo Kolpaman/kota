@@ -54,7 +54,7 @@ install -Dm644 gnome-extension/%{uuid}/schemas/org.gnome.shell.extensions.kota.g
     %{buildroot}%{_datadir}/glib-2.0/schemas/org.gnome.shell.extensions.kota.gschema.xml
 
 %check
-cargo test --release --locked --workspace
+cargo test --release --locked
 
 %post
 %systemd_user_post kota.service

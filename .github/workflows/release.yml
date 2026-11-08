@@ -3,6 +3,7 @@
 #   kota_<sürüm>_<amd64|arm64>.deb               (Debian, Ubuntu, Mint, Pop!_OS…)
 #   kota-<sürüm>-1.*.rpm                         (Fedora, openSUSE, RHEL…)
 #   kota@ensignalp.shell-extension.zip           (extensions.gnome.org)
+#   Kota_<sürüm>_x64-setup.exe                   (Windows 10/11, görev çubuğu uygulaması)
 name: build
 
 on:
@@ -30,7 +31,7 @@ jobs:
         run: |
           docker run --rm -v "$PWD":/src -w /src rust:alpine sh -euc '
             apk add --no-cache musl-dev gcc make cmake perl dpkg coreutils zip tar >/dev/null
-            cargo test --locked --workspace
+            cargo test --locked
             cargo build --release --locked
             strip -o /src/kota-bin target/release/kota
             ver=$(sed -n "s/^version = \"\(.*\)\"/\1/p" Cargo.toml | head -1)
@@ -64,9 +65,24 @@ jobs:
           path: |
             dist/*.rpm
 
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Tauri CLI
+        run: cargo install tauri-cli --version "^2" --locked
+      - name: Kurulum dosyası
+        working-directory: crates/kota-win
+        run: cargo tauri build --bundles nsis
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: target/release/bundle/nsis/*.exe
+
   release:
     if: startsWith(github.ref, 'refs/tags/v')
-    needs: [static, rpm]
+    needs: [static, rpm, windows]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

@@ -89,6 +89,8 @@ Codex · Free  ● bağlı · 23:56
   ileride macOS'a taşınabilir). Sağlayıcı eklemek: `src/providers/` altına bir
   modül + `providers::build` içine bir satır.
 - `crates/kota`: CLI ve D-Bus servisi (tek binary).
+- `crates/kota-win`: Windows uygulaması (Tauri; görev çubuğu simgesi + açılır pencere).
+  Çekirdek, hesaplar, alt proje tespiti ve TR/EN metinleri Linux sürümüyle ortaktır.
 - `gnome-extension/kota@ensignalp`: GNOME 48–50 eklentisi. **Binary içermez**;
   yalnızca servisi dinler (extensions.gnome.org kuralı).
 
@@ -124,6 +126,23 @@ kapatıp açın (Wayland'da yeni eklenti ancak böyle görünür).
 (`libsecret-tools` / `libsecret`). Claude, Codex, Gemini ve Copilot girişleri bunsuz da çalışır.
 
 **Kaynaktan** (Rust gerekir): `make install` · `make uninstall`
+
+### Windows 10 / 11
+
+Aynı tasarım ve özellikler; GNOME paneli yerine **görev çubuğu** (saatin yanındaki
+sistem tepsisi). [Sürümler](https://github.com/ensignalp/kota/releases) sayfasından
+`Kota_<sürüm>_x64-setup.exe` dosyasını indirip kurun (yönetici izni gerekmez).
+
+- Simge: en dolu limitin halkası (limite duyarlı renk) + AI veya Kota logosu; üzerine
+  gelince tüm değerler (`Claude  G %25 · H %24`). Tıklayınca açılır pencere, sağ tık menü.
+- Açılır pencere Windows 11'in **acrylic** bulanıklığını kullanır; açık/koyu tema sistemi izler.
+- Anahtarlar ve hesap profilleri **Windows Kimlik Bilgisi Yöneticisi**'nde saklanır.
+- Claude Code, Codex ve Gemini CLI'ın Windows giriş dosyaları (`%USERPROFILE%\.claude` …)
+  kendiliğinden bulunur. Ayarlar: `%APPDATA%\kota\`.
+- Simge görünmüyorsa: Görev çubuğu ayarları → Diğer sistem tepsisi simgeleri → Kota.
+
+Kaynaktan: `cd crates/kota-win && cargo tauri build` (Windows'ta) ya da Linux'tan
+`cargo xwin` ile çapraz derleme (bkz. `docs/YAYIN.md`).
 
 ## Kullanım
 
@@ -186,7 +205,7 @@ otomatik gösterilir); API bozulursa yerel loglara ve son bilinen değere düş�
 
 ```sh
 make test          # 102 test: gerçek yanıt fixture'ları, sahte HTTP sunucusuyla token yenileme/kilit/CAS
-cargo clippy --workspace --all-targets
+cargo clippy --all-targets
 make pack          # extensions.gnome.org için zip (dist/)
 make rpm           # Fedora RPM (packaging/rpm/kota.spec) · yayın: docs/YAYIN.md
 ```

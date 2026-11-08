@@ -1,0 +1,254 @@
+/* Kota — Windows arayüzü. GNOME eklentisindeki stylesheet.css ile aynı görünüm;
+ * Windows 11'de pencerenin arkası acrylic bulanıklığıdır (Blur My Shell karşılığı). */
+
+:root {
+  --accent: #f5a623;
+  --glass-alpha: 0.7;
+  --bg: 26, 30, 38;
+  --fg: #e6edf3;
+  --strong: #f0f6fc;
+  --dim: rgba(230, 237, 243, 0.58);
+  --ink: 255, 255, 255;
+  --card: rgba(255, 255, 255, 0.055);
+  --card-border: rgba(255, 255, 255, 0.05);
+  --link: #58a6ff;
+  --radius: 20px;
+  color-scheme: dark;
+}
+:root.kota-light {
+  --bg: 246, 247, 249;
+  --fg: #1f2328;
+  --strong: #1f2328;
+  --dim: rgba(31, 35, 40, 0.6);
+  --ink: 0, 0, 0;
+  --card: rgba(0, 0, 0, 0.04);
+  --card-border: rgba(0, 0, 0, 0.06);
+  --link: #0969da;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: transparent; overflow: hidden; }
+body {
+  font: 13.5px/1.35 "Segoe UI Variable Text", "Segoe UI", Inter, system-ui, sans-serif;
+  color: var(--fg);
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; padding: 0; }
+[hidden] { display: none !important; }
+.kota-grow { flex: 1 1 auto; min-width: 0; }
+
+/* ---------- Açılır pencere kabı ---------- */
+.kota-popup { padding: 12px; }
+.kota-root {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 10px;
+  border-radius: var(--radius);
+  background: rgb(var(--bg));
+  border: 1px solid rgba(var(--ink), 0.08);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
+}
+.kota-glass .kota-root { background: rgba(var(--bg), var(--glass-alpha)); box-shadow: none; }
+.kota-glass .kota-card, .kota-glass .kota-tile { background: rgba(var(--ink), 0.07); }
+
+/* ---------- Başlık ---------- */
+.kota-header { display: flex; align-items: center; gap: 6px; padding: 2px 6px 4px 8px; }
+.kota-title { font-size: 1.18em; font-weight: 800; color: var(--strong); }
+.kota-subtitle { font-size: 0.85em; font-weight: 700; padding: 1px 8px; border-radius: 99px; }
+.kota-paused { color: #f5a623; background: rgba(245, 166, 35, 0.14); }
+.kota-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 99px; color: rgba(var(--ink), 0.72);
+  flex: 0 0 auto;
+}
+.kota-icon-btn:hover { background: rgba(var(--ink), 0.09); color: var(--strong); }
+.kota-icon-btn:active { background: rgba(var(--ink), 0.15); }
+
+/* ---------- Kutucuklar ---------- */
+.kota-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.kota-tile {
+  display: flex; flex-direction: column; gap: 4px; min-width: 0; overflow: hidden;
+  background: var(--card); border: 1px solid var(--card-border); border-radius: 14px; padding: 10px 12px;
+}
+.kota-tile-top { display: flex; gap: 6px; align-items: center; }
+.kota-tile-title { font-size: 0.92em; font-weight: 600; color: rgba(var(--ink), 0.78); flex: 1; }
+.kota-tile-badge { font-size: 0.85em; color: var(--dim); }
+.kota-tile-badge.kota-live { color: #3fb950; }
+.kota-tile-bottom { display: flex; gap: 4px; align-items: flex-end; min-width: 0; }
+.kota-tile-bottom > .kota-minibars, .kota-tile-bottom > .kota-icon { flex: 0 0 auto; }
+.kota-tile-value { white-space: nowrap; font-size: 1.6em; font-weight: 700; color: var(--strong); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.kota-tile-unit, .kota-tile-side { font-size: 0.88em; color: var(--dim); padding-bottom: 4px; }
+.kota-tile-foot { font-size: 0.8em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kota-minibars { display: flex; gap: 1.5px; align-items: flex-end; padding-bottom: 4px; }
+.kota-minibar { width: 2.5px; border-radius: 1px; background: rgba(var(--ink), 0.45); }
+
+/* ---------- Kartlar ---------- */
+.kota-card {
+  display: flex; flex-direction: column; gap: 10px;
+  background: var(--card); border: 1px solid var(--card-border); border-radius: 14px; padding: 12px 14px;
+}
+.kota-card-head { display: flex; align-items: center; gap: 8px; }
+.kota-card-title { font-weight: 700; color: var(--strong); white-space: pre; }
+.kota-card-right { font-weight: 600; color: rgba(var(--ink), 0.75); font-variant-numeric: tabular-nums; }
+.kota-card-body { display: flex; flex-direction: column; gap: 8px; }
+.kota-dim { font-size: 0.86em; color: var(--dim); }
+.kota-strong { font-weight: 700; color: var(--strong); }
+.kota-strong-small { font-weight: 600; font-size: 0.92em; color: var(--strong); }
+.kota-link { color: var(--link); font-weight: 600; }
+.kota-warn-text { color: #f5a623; }
+.kota-good-text { color: #3fb950; }
+.kota-chip { font-size: 0.78em; font-weight: 700; padding: 1px 8px; border-radius: 99px; background: rgba(var(--ink), 0.1); }
+.kota-footer { font-size: 0.78em; padding: 0 8px; opacity: 0.7; }
+.kota-icon { display: block; flex: 0 0 auto; }
+.kota-letter {
+  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+  font-weight: 800; border-radius: 5px; background: rgba(var(--ink), 0.14);
+}
+
+/* ---------- AI kullanımı ---------- */
+.kota-usage-grid { display: grid; gap: 6px; }
+.kota-usage-cell { display: block; text-align: left; border-radius: 10px; padding: 6px 8px; min-width: 0; }
+.kota-usage-cell:hover { background: rgba(var(--ink), 0.05); }
+.kota-usage-cell.selected { background: rgba(var(--ink), 0.08); }
+.kota-usage-row { display: flex; gap: 12px; align-items: center; }
+.kota-usage-text { min-width: 0; display: flex; flex-direction: column; }
+.kota-usage-text > * { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kota-usage-name { font-size: 0.85em; color: rgba(var(--ink), 0.7); }
+.kota-usage-value { font-size: 1.45em; font-weight: 800; color: var(--strong); font-variant-numeric: tabular-nums; line-height: 1.15; }
+.kota-usage-caption { font-size: 0.92em; font-weight: 600; color: rgba(var(--ink), 0.88); }
+.kota-usage-sub { font-size: 0.8em; color: var(--dim); }
+.kota-usage-sub.kota-link { color: var(--link); }
+.kota-sev-warning { color: #f5a623 !important; }
+.kota-sev-critical { color: #ff6b5e !important; }
+.kota-sev-stale { color: #8b949e !important; }
+.kota-ring { position: relative; flex: 0 0 auto; }
+.kota-ring svg { display: block; }
+.kota-ring-track { stroke: rgba(var(--ink), 0.1); }
+.kota-ring-child { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.kota-usage-bar { padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
+.kota-usage-bar-top { display: flex; gap: 10px; align-items: center; }
+.kota-usage-bar-name { font-weight: 700; color: var(--strong); }
+.kota-usage-bar-value { font-size: 1.25em; font-weight: 800; color: var(--strong); font-variant-numeric: tabular-nums; }
+
+.kota-detail {
+  display: flex; flex-direction: column; gap: 8px; margin-top: 4px;
+  padding: 10px 12px; border-radius: 10px; background: rgba(0, 0, 0, 0.22);
+}
+.kota-light .kota-detail { background: rgba(0, 0, 0, 0.045); }
+.kota-detail-head { display: flex; gap: 8px; align-items: center; }
+.kota-status { font-size: 0.85em; }
+.kota-status-ok { color: #3fb950; }
+.kota-status-error { color: #d29922; }
+.kota-status-expired { color: #f78166; }
+.kota-status-not_connected, .kota-status-unsupported { color: #8b949e; }
+.kota-window { display: flex; flex-direction: column; gap: 4px; }
+.kota-window-top { display: flex; align-items: center; }
+.kota-window-label { font-size: 0.92em; }
+.kota-window-pct { font-weight: 700; font-variant-numeric: tabular-nums; }
+.kota-pill-btn {
+  align-self: flex-start; border-radius: 99px; padding: 5px 14px; font-weight: 600;
+  background: rgba(88, 166, 255, 0.16); color: #79b8ff;
+}
+.kota-pill-btn:hover { background: rgba(88, 166, 255, 0.28); }
+
+/* ---------- İlerleme çizgileri: yuvarlak uç, degrade, parlaklık, tempo işareti ---------- */
+.kota-progress { position: relative; background: rgba(var(--ink), 0.09); margin: 3px 0; }
+.kota-progress-fill { position: absolute; inset: 0 auto 0 0; border-radius: inherit; overflow: hidden; }
+.kota-progress-fill::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 55%);
+}
+.kota-progress-pace {
+  position: absolute; top: -3px; width: 3px; border-radius: 2px; background: #fff;
+  box-shadow: 0 0 0 1px rgba(15, 18, 23, 0.75);
+}
+
+/* ---------- Geçmiş grafiği ---------- */
+.kota-range { display: flex; gap: 2px; padding: 2px; border-radius: 99px; background: rgba(var(--ink), 0.06); }
+.kota-range-btn { font-size: 0.78em; font-weight: 700; padding: 2px 9px; border-radius: 99px; color: rgba(var(--ink), 0.65); }
+.kota-range-btn:hover { color: var(--strong); }
+.kota-range-btn.checked { background: rgba(var(--ink), 0.14); color: var(--strong); }
+.kota-light .kota-range-btn.checked { background: #fff; }
+.kota-chart { display: flex; gap: 4px; align-items: flex-end; }
+.kota-chart-col { flex: 1; height: 100%; display: flex; align-items: flex-end; }
+.kota-chart-bar { width: 100%; border-radius: 3px; }
+.kota-chart-bar.some { background: rgba(var(--ink), 0.32); }
+.kota-chart-bar.none { background: rgba(var(--ink), 0.08); }
+.kota-chart-col:hover .kota-chart-bar { background: var(--strong) !important; }
+.kota-axis { display: flex; padding-top: 2px; }
+.kota-axis-label { font-size: 0.8em; }
+.kota-axis-day { flex: 1; text-align: center; }
+
+/* ---------- Canlı ajanlar: klasör → alt proje → ajan ağacı ---------- */
+.kota-scroll { max-height: 300px; overflow-y: auto; margin-right: -6px; padding-right: 6px; }
+.kota-scroll::-webkit-scrollbar { width: 6px; }
+.kota-scroll::-webkit-scrollbar-thumb { background: rgba(var(--ink), 0.2); border-radius: 3px; }
+.kota-live-list { display: flex; flex-direction: column; gap: 14px; }
+.kota-group { display: flex; flex-direction: column; }
+.kota-group-head { display: flex; gap: 8px; }
+.kota-group-names { display: flex; gap: 8px; align-items: baseline; flex: 1; min-width: 0; padding-top: 2px; }
+.kota-path { font-size: 0.8em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kota-node-col { display: flex; flex-direction: column; align-items: center; width: 22px; flex: 0 0 22px; }
+.kota-folder, .kota-node-icon {
+  width: 22px; height: 22px; border-radius: 7px; display: flex; align-items: center; justify-content: center;
+}
+.kota-folder { background: rgba(88, 166, 255, 0.16); color: #79b8ff; }
+.kota-node-icon { background: rgba(245, 166, 35, 0.14); color: #f5b84a; }
+.kota-stem { flex: 1; width: 1.5px; background: rgba(var(--ink), 0.26); min-height: 2px; }
+.kota-tree-row { display: flex; }
+.kota-gutter { position: relative; width: 22px; flex: 0 0 22px; }
+.kota-gutter.cont::before, .kota-gutter.elbow:not(.last)::before {
+  content: ""; position: absolute; left: 10.25px; top: 0; bottom: 0; width: 1.5px; background: rgba(var(--ink), 0.26);
+}
+.kota-gutter.elbow::after {
+  content: ""; position: absolute; left: 10.25px; top: 0; right: 2px; height: var(--elbow);
+  border-left: 1.5px solid rgba(var(--ink), 0.26); border-bottom: 1.5px solid rgba(var(--ink), 0.26);
+  border-bottom-left-radius: 7px;
+}
+.kota-node { display: flex; gap: 8px; flex: 1; min-width: 0; padding-top: 4px; align-items: flex-start; }
+.kota-node-text { display: flex; gap: 8px; align-items: baseline; flex: 1; min-width: 0; padding-top: 2px; }
+.kota-node-name { font-weight: 700; color: var(--strong); font-size: 0.95em; }
+.kota-node-open { width: 24px; height: 24px; }
+.kota-agent { display: flex; gap: 10px; flex: 1; min-width: 0; padding: 4px 0; align-items: center; }
+.kota-agent-icon {
+  width: 36px; height: 36px; border-radius: 12px; flex: 0 0 36px; align-self: flex-start;
+  display: flex; align-items: center; justify-content: center;
+  background: #0d1117; border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.kota-light .kota-agent-icon { background: #fff; border-color: rgba(0, 0, 0, 0.1); }
+.kota-agent-name { font-weight: 700; color: var(--strong); }
+.kota-working { color: #3fb950; }
+.kota-chips { display: flex; gap: 4px; padding-top: 3px; flex-wrap: wrap; }
+.kota-port { font-size: 0.78em; font-weight: 600; padding: 1px 7px; border-radius: 99px; background: rgba(88, 166, 255, 0.14); color: #79b8ff; }
+.kota-stop { background: rgba(var(--ink), 0.08); }
+.kota-stop:hover { background: rgba(248, 81, 73, 0.25); color: #ff7b72; }
+.kota-go { background: rgba(88, 166, 255, 0.85); color: #fff; }
+.kota-go:hover { background: #58a6ff; color: #fff; }
+
+/* ---------- Filtre ---------- */
+.kota-filter {
+  display: flex; align-items: center; gap: 8px; border-radius: 12px; padding: 9px 12px;
+  background: var(--card); border: 1px solid rgba(var(--ink), 0.06);
+}
+.kota-filter:focus-within { border-color: rgba(88, 166, 255, 0.6); }
+.kota-filter input { flex: 1; border: 0; outline: 0; background: none; color: var(--fg); font: inherit; caret-color: var(--link); }
+.kota-filter input::placeholder { color: var(--dim); }
+.kota-filter input::-webkit-search-cancel-button { filter: invert(0.6); }
+
+/* ---------- Simgeler (tek renkli, mask ile temaya uyar) ---------- */
+.kota-glyph { display: inline-block; width: 14px; height: 14px; background: currentColor; flex: 0 0 auto;
+  -webkit-mask: var(--g) center / contain no-repeat; mask: var(--g) center / contain no-repeat; }
+.kota-glyph[data-icon="pause"] { --g: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='2' width='3.5' height='12' rx='1'/%3E%3Crect x='9.5' y='2' width='3.5' height='12' rx='1'/%3E%3C/svg%3E"); }
+.kota-glyph[data-icon="play"] { --g: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 2.5v11a1 1 0 0 0 1.5.86l9-5.5a1 1 0 0 0 0-1.72l-9-5.5A1 1 0 0 0 4 2.5z'/%3E%3C/svg%3E"); }
+.kota-glyph[data-icon="refresh"] { --g: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M13.5 8A5.5 5.5 0 1 1 11.6 3.8'/%3E%3Cpath d='M13.5 2v3.5H10' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+.kota-glyph[data-icon="settings"] { --g: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M6.8 1h2.4l.4 1.9 1.2.5 1.6-1.1 1.7 1.7-1.1 1.6.5 1.2 1.9.4v2.4l-1.9.4-.5 1.2 1.1 1.6-1.7 1.7-1.6-1.1-1.2.5-.4 1.9H6.8l-.4-1.9-1.2-.5-1.6 1.1-1.7-1.7 1.1-1.6-.5-1.2L.6 9.2V6.8l1.9-.4.5-1.2-1.1-1.6 1.7-1.7 1.6 1.1 1.2-.5zM8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z'/%3E%3C/svg%3E"); }
+.kota-glyph[data-icon="stop"] { --g: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3' y='3' width='10' height='10' rx='2'/%3E%3C/svg%3E"); }
+.kota-glyph[data-icon="folder"], .kota-glyph[data-icon="folder-open"] { --g: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 3.5A1.5 1.5 0 0 1 3 2h3l1.5 1.5H13A1.5 1.5 0 0 1 14.5 5v7.5A1.5 1.5 0 0 1 13 14H3a1.5 1.5 0 0 1-1.5-1.5z'/%3E%3C/svg%3E"); }
+.kota-glyph[data-icon="search"] { --g: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'%3E%3Ccircle cx='7' cy='7' r='4.5'/%3E%3Cpath d='M10.5 10.5 14 14'/%3E%3C/svg%3E"); color: var(--dim); }
+.kota-folder .kota-glyph, .kota-node-icon .kota-glyph { width: 13px; height: 13px; }
+
+/* ---------- Windows: pencerenin kendisi yuvarlatılmış ve gölgeli (DWM);
+ * içerik kenarsız oturur, zemin acrylic üzerinde yarı saydamdır. ---------- */
+.kota-windows .kota-popup { padding: 0; }
+.kota-windows .kota-root { border-radius: 0; border: 0; box-shadow: none; min-height: 100vh; }

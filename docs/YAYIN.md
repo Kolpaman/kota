@@ -47,3 +47,14 @@ Sürüm sayfasına `dist/kota@ensignalp.shell-extension.zip` ve RPM'leri ekle.
    "Upload": `dist/kota-0.5.1-1.*.src.rpm`.
 4. Kullanıcılar: `sudo dnf copr enable ensignalp/kota && sudo dnf install kota gnome-shell-extension-kota`
    ardından `systemctl --user enable --now kota`.
+
+## Windows (Linux'tan çapraz derleme)
+
+```sh
+# bir kez: Windows SDK'lı derleme imajı (cargo-xwin + NSIS + Tauri CLI)
+podman build -t kota-xwin-tauri -f packaging/windows/Containerfile packaging/windows
+# kurulum dosyası: target/xwin/x86_64-pc-windows-msvc/release/bundle/nsis/Kota_<sürüm>_x64-setup.exe
+podman run --rm -v "$PWD":/io:Z -w /io/crates/kota-win kota-xwin-tauri \
+  cargo tauri build --runner cargo-xwin --target x86_64-pc-windows-msvc --bundles nsis -- --target-dir /io/target/xwin
+```
+GitHub Actions'ta `windows` işi aynı dosyayı yerel Windows makinesinde üretir.

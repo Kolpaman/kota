@@ -1,0 +1,6 @@
+# Linux'tan Windows (x86_64-pc-windows-msvc) derlemesi: clang/lld + Windows SDK
+# (cargo-xwin), NSIS ve Tauri CLI.
+FROM docker.io/messense/cargo-xwin:latest
+RUN rustup update stable && rustup default stable && rustup target add x86_64-pc-windows-msvc
+RUN apt-get update -qq && apt-get install -y -qq nsis >/dev/null && rm -rf /var/lib/apt/lists/*
+RUN cargo install tauri-cli --version "^2" --locked
